@@ -11,6 +11,11 @@ int main(void) {
         string_append(&s, i);
     }
 
-    printf("%s\n", s.value);
+    printf("value: '%s', len: %lu\n", s.value, s.len);
+
+    string_set(&s, "lol");
+
+    printf("value: '%s', len: %lu\n", s.value, s.len);
+
     return 0;
 }

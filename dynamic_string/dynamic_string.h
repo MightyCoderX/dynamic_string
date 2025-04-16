@@ -10,7 +10,8 @@ typedef struct {
 } String;
 
 String string_init(const char* cstr);
-void string_append(String str, const char* cstr);
+void string_append(String* p_str, const char chr);
+void string_concat(String* p_str, const char* cstr);
 void string_free(String str);
 
 #endif

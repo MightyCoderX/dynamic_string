@@ -5,8 +5,9 @@
 #include "./dynamic_string.h"
 
 String string_init(const char* cstr) {
-    size_t len = strlen(cstr);
-    String new = { malloc(len), len, len };
+    size_t len = strlen(cstr) + 1;
+    size_t capacity = len + 10;
+    String new = { malloc(capacity), capacity, len };
 
     for(size_t i = 0; i < len; i++) {
         new.value[i] = cstr[i];
@@ -15,26 +16,44 @@ String string_init(const char* cstr) {
     return new;
 }
 
-void string_append(String str, const char* cstr) {
-    size_t cstr_len = strlen(cstr);
+void string_append(String* p_str, const char chr) {
+    size_t new_len = p_str->len + 1;
 
-    size_t new_len = str.len + cstr_len;
-
-    if(new_len > str.capacity) {
-        char* old_value = str.value;
+    if(new_len > p_str->capacity) {
+        char* old_value = p_str->value;
         char* new_value = malloc(new_len);
 
-        memcpy(new_value, old_value, str.len);
-        printf("new_value: %s\n", new_value);
+        memcpy(new_value, old_value, p_str->len);
         free(old_value);
 
-        str.value = new_value;
-        str.capacity = new_len;
+        p_str->value = new_value;
+        p_str->capacity = new_len;
+    }
+
+    p_str->value[p_str->len - 1] = chr;
+    p_str->value[p_str->len] = '\0';
+    p_str->len = new_len;
+}
+
+void string_concat(String* p_str, const char* cstr) {
+    size_t cstr_len = strlen(cstr);
+
+    size_t new_len = p_str->len + cstr_len;
+
+    if(new_len > p_str->capacity) {
+        char* old_value = p_str->value;
+        char* new_value = malloc(new_len);
+
+        memcpy(new_value, old_value, p_str->len);
+        free(old_value);
+
+        p_str->value = new_value;
+        p_str->capacity = new_len;
     }
 
     for(size_t i = 0; i < cstr_len; i++) {
-        str.value[str.len] = cstr[i];
-        str.len++;
+        p_str->value[p_str->len - 1] = cstr[i];
+        p_str->len++;
     }
 }
 

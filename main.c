@@ -13,8 +13,12 @@ int main(void) {
 
     printf("value: '%s', len: %lu\n", s.value, s.len);
 
+    // string_clear(&s);
     string_set(&s, "lol");
 
+    printf("value: '%s', len: %lu\n", s.value, s.len);
+
+    string_append(&s, 'l');
     printf("value: '%s', len: %lu\n", s.value, s.len);
 
     return 0;

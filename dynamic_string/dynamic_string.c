@@ -1,4 +1,3 @@
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -19,7 +18,7 @@ String string_init(const char* cstr) {
 
 void string_clear(String* p_str) {
     for(size_t i = 0; i < p_str->len; i++) {
-        p_str->value[i] = 0;
+        p_str->value[i] = '\0';
     }
     p_str->len = 0;
 }
@@ -60,8 +59,8 @@ void string_append(String* p_str, const char chr) {
         p_str->capacity = new_len;
     }
 
-    p_str->value[p_str->len - 1] = chr;
-    p_str->value[p_str->len] = '\0';
+    p_str->value[p_str->len] = chr;
+    p_str->value[p_str->len + 1] = '\0';
     p_str->len = new_len;
 }
 
@@ -87,9 +86,9 @@ void string_concat(String* p_str, const char* cstr) {
     }
 }
 
-void string_free(String str) {
-    free(str.value);
-    str.value = NULL;
-    str.len = 0;
-    str.capacity = 0;
+void string_free(String* p_str) {
+    free(p_str->value);
+    p_str->value = NULL;
+    p_str->len = 0;
+    p_str->capacity = 0;
 }

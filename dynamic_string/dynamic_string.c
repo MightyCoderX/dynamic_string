@@ -42,7 +42,7 @@ String string_from_cstr_sub(const char* cstr, long start, long end) {
         u_end = end + 1;
     }
 
-    size_t u_start = 0;
+    size_t u_start;
     if(start < 0) {
         if(len + start > 0) {
             u_start = len + start;
@@ -79,7 +79,7 @@ String string_from_cstr_intersection(const char* cstr1, const char* cstr2, long 
     cstr1_len = strlen(cstr1);
     cstr2_len = strlen(cstr2);
 
-    size_t u_max_len = max_len <= 0 ? strlen(cstr1) : max_len;
+    size_t u_max_len = max_len <= 0 ? strlen(cstr1) : (size_t)max_len;
     String intersection = string_new_with_cap(u_max_len);
 
     size_t i = 0;

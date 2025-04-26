@@ -18,10 +18,10 @@ String string_new() {
 
 String string_from_cstr(const char* cstr) {
     size_t len = strlen(cstr);
-    size_t capacity = len + 10;
+    size_t capacity = len + 1;
     String new = { malloc(capacity), capacity, len };
 
-    for(size_t i = 0; i < len; i++) {
+    for(size_t i = 0; i < capacity; i++) {
         new.value[i] = cstr[i];
     }
 

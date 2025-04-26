@@ -8,6 +8,7 @@
 
 String string_new_with_cap(size_t capacity) {
     String new = { malloc(capacity), capacity, 0 };
+    new.value[0] = '\0';
     return new;
 }
 

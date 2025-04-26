@@ -18,7 +18,7 @@ String string_new_with_cap(size_t capacity);
 /*
  * Create new string with initial capacity 0
  */
-String string_new();
+String string_new(void);
 
 /*
  * Initialize string from C string

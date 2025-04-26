@@ -130,9 +130,7 @@ void string_set(String* p_str, const char* cstr) {
 
     for(size_t i = 0; i < cstr_len; i++) {
         p_str->value[i] = cstr[i];
-        printf("%d ", cstr[i]);
     }
-    puts("");
 
     p_str->length = cstr_len;
 }

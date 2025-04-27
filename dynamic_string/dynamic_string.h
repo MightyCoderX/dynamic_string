@@ -10,6 +10,8 @@ typedef struct {
     size_t length;
 } String;
 
+size_t string_normalize_index(size_t len, long index);
+
 /*
  * Create new string with initial capacity
  */
@@ -32,7 +34,7 @@ String string_from_cstr(const char* cstr);
 String string_from_cstr_sub(const char* cstr, long start, long end);
 
 /*
- * Initialize 
+ * Initialize String from "intersection" between two c strings
  */
 String string_from_cstr_intersection(const char* cstr1, const char* cstr2, long max_len);
 
@@ -44,10 +46,17 @@ void string_set(String* p_str, const char* cstr);
 void string_append(String* p_str, const char chr);
 void string_concat(String* p_str, const char* cstr);
 
-String string_substring(String* p_str, long start, long end);
+String string_substring(const String* p_str, long start, long end);
 
 void string_upper(String* p_str);
 void string_lower(String* p_str);
+
+void string_print_debug(const String* p_str);
+
+char* string_to_cstr(const String* p_str);
+
+char string_get_char(const String* p_str, long index);
+void string_set_char(String* p_str, long index, char chr);
 
 void string_free(String* p_str);
 

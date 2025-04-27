@@ -28,30 +28,29 @@ String string_from_cstr(const char* cstr) {
     return new;
 }
 
+size_t string_normalize_index(size_t len, long index) {
+    size_t u_index;
+    if(index < 0) {
+        if(len + index > 0) {
+            u_index = len + index;
+        } else {
+            u_index = 0;
+        }
+    } else {
+        u_index = (size_t)index;
+        if(u_index > len) {
+            u_index = len - 1;
+        }
+    }
+
+    return u_index;
+}
+
 String string_from_cstr_sub(const char* cstr, long start, long end) {
     size_t len = strlen(cstr);
 
-    size_t u_end;
-    if(end < 0) {
-        if(len + end + 1 > 0) {
-            u_end = len + end + 1;
-        } else {
-            u_end = 0;
-        }
-    } else {
-        u_end = end + 1;
-    }
-
-    size_t u_start;
-    if(start < 0) {
-        if(len + start > 0) {
-            u_start = len + start;
-        } else {
-            u_start = 0;
-        }
-    } else {
-        u_start = start;
-    }
+    size_t u_start = string_normalize_index(len, start);
+    size_t u_end = string_normalize_index(len, end);
 
     String sub = string_from_cstr("");
 
@@ -59,7 +58,7 @@ String string_from_cstr_sub(const char* cstr, long start, long end) {
         return sub;
     }
 
-    for(size_t i = u_start; i < u_end; i++) {
+    for(size_t i = u_start; i <= u_end; i++) {
         string_append(&sub, cstr[i]);
     }
 
@@ -125,7 +124,7 @@ void string_set(String* p_str, const char* cstr) {
 
     string_clear(p_str);
 
-    if(cstr_len > p_str->capacity) {
+    if(cstr_len >= p_str->capacity) {
         string_extend(p_str, cstr_len, false);
     }
 
@@ -139,7 +138,7 @@ void string_set(String* p_str, const char* cstr) {
 void string_append(String* p_str, const char chr) {
     size_t new_len = p_str->length + 1;
 
-    if(new_len > p_str->capacity) {
+    if(new_len >= p_str->capacity) {
         string_extend(p_str, new_len + 1, true);
     }
 
@@ -153,17 +152,19 @@ void string_concat(String* p_str, const char* cstr) {
 
     size_t new_len = p_str->length + cstr_len;
 
-    if(new_len > p_str->capacity) {
-        string_extend(p_str, new_len, true);
+    if(new_len >= p_str->capacity) {
+        string_extend(p_str, new_len + 1, true);
     }
 
     for(size_t i = 0; i < cstr_len; i++) {
         p_str->value[p_str->length] = cstr[i];
         p_str->length++;
     }
+
+    p_str->value[p_str->length] = '\0';
 }
 
-String string_substring(String* p_str, long start, long end) {
+String string_substring(const String* p_str, long start, long end) {
     return string_from_cstr_sub(p_str->value, start, end);
 }
 
@@ -177,6 +178,30 @@ void string_lower(String* p_str) {
     for(size_t i = 0; i < p_str->length; i++) {
         p_str->value[i] = tolower(p_str->value[i]);
     }
+}
+
+char string_get_char(const String* p_str, long index) {
+    return p_str->value[string_normalize_index(p_str->length, index)];
+}
+
+void string_set_char(String* p_str, long index, char chr) {
+    p_str->value[string_normalize_index(p_str->length, index)] = chr;
+}
+
+char* string_to_cstr(const String* p_str) {
+    char* cstr = malloc(p_str->length + 1);
+    for(size_t i = 0; i < p_str->length; i++) {
+        cstr[i] = p_str->value[i];
+    }
+
+    cstr[p_str->length] = '\0';
+
+    return cstr;
+}
+
+void string_print_debug(const String* p_str) {
+    printf("(String){value=\"%s\", length=%lu, capacity=%lu}\n", p_str->value, p_str->length,
+        p_str->capacity);
 }
 
 void string_free(String* p_str) {
